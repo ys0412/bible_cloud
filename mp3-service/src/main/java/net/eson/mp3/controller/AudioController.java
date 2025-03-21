@@ -3,9 +3,20 @@ package net.eson.mp3.controller;
 import net.eson.mp3.entity.BibleAudio;
 import net.eson.mp3.service.AudioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -18,6 +29,22 @@ public class AudioController {
 
     @Autowired
     private AudioService audioService;
+
+    @Value("${mp3.path}")
+    private String mp3Path;
+
+    @GetMapping("/play/{fileName}")
+    public Mono<ResponseEntity<InputStreamResource>> playMp3(@PathVariable String fileName) throws IOException {
+        System.out.println("请求播放："+fileName);
+        ClassPathResource mp3File = new ClassPathResource("static/mp3/" + fileName);
+        if(!mp3File.exists()){return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).build());}
+        InputStream inputStream = mp3File.getInputStream();
+        return Mono.just(ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,"inline;filename="+fileName)
+                .header(HttpHeaders.ACCEPT_RANGES, "bytes") // 添加断点续传支持
+                .contentType(MediaType.parseMediaType("audio/mpeg"))
+                .body(new InputStreamResource(inputStream)));
+    }
 
     /*
      * 返回所有章节
@@ -37,7 +64,7 @@ public class AudioController {
      * @return org.springframework.http.ResponseEntity<net.eson.mp3.entity.BibleAudio>
      */
     @GetMapping("/audio/{id}")
-    public ResponseEntity<BibleAudio> getAudioById(Integer id){
+    public ResponseEntity<BibleAudio> getAudioById(@PathVariable Integer id){
         BibleAudio audio = audioService.getAudioById(id);
         return audio != null? ResponseEntity.ok(audio):ResponseEntity.notFound().build();
     }
