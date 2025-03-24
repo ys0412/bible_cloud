@@ -22,4 +22,3 @@ public class BibleAudio {
     private Integer duration; // 音频时长（秒）
 
 }
-    
