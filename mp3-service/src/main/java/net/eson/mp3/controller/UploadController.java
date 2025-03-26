@@ -154,10 +154,16 @@ public class UploadController {
     @PostMapping("/chapterTxt")
     public ResponseEntity<?> uploadTxt(@RequestParam("file") MultipartFile file,
                                        @RequestParam(value = "chapterId", required = false) Integer chapterId) throws IOException {
-        logger.info("请求上传TXT, scrollId={}", chapterId);
+        logger.info("请求上传TXT, chapterId={}", chapterId);
 
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("文件不能为空");
+        String contentType = file.getContentType();
+        if (!"text/plain".equals(contentType)) {
+            return ResponseEntity.badRequest().body("文件类型不匹配, 只支持文本文件上传");
+        }
+
+        // 检查文件大小是否为零
+        if (file.getSize() == 0) {
+            return ResponseEntity.badRequest().body("文件内容为空");
         }
 
         // 生成唯一文件名
