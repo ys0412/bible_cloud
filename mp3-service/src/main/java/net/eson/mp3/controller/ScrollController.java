@@ -1,7 +1,7 @@
 package net.eson.mp3.controller;
 
 import net.eson.mp3.entity.ScrollDict;
-import net.eson.mp3.service.impl.ScrollerServiceImpl;
+import net.eson.mp3.service.impl.ScrollServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +17,9 @@ import java.util.List;
 public class ScrollController {
 
     @Autowired
-    private ScrollerServiceImpl scrollerService;
+    private ScrollServiceImpl scrollerService;
 
-    @GetMapping("/detail/{bookId}")
+    @GetMapping("/list/{bookId}")
     public List<ScrollDict> getScrollsByBook(@PathVariable Integer bookId) {
         return scrollerService.getScrollsWithBook(bookId);
     }

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @TableName("book_dict")
 public class BookDict {
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Integer bookId;
     private String bookName;     // 书名
     private String author;
     private String coverUrl; // 封面url

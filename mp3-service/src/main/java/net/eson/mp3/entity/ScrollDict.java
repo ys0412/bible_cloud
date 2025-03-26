@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @TableName("scroll_dict")
 public class ScrollDict {
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Integer scrollId;
     @TableField("book_id")
     private Integer bookId;  // 外键，关联 book 表的 id
     private String scrollName;     // 书名

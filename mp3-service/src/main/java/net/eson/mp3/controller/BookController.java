@@ -2,7 +2,6 @@ package net.eson.mp3.controller;
 
 import net.eson.mp3.entity.BookDict;
 import net.eson.mp3.service.BookDictService;
-import net.eson.mp3.service.impl.ScrollerServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

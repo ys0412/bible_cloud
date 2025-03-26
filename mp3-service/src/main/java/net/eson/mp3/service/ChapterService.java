@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ChapterService extends IService<ChapterDict> {
     public List<ChapterDict> getChaptersByBookAndScroll(Integer bookId, Integer scrollId);
+
+    public ChapterDict getChapterByBookScrollAndId(Integer bookId,Integer scrollId,Integer ChapterId);
 }
